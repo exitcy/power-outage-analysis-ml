@@ -1,9 +1,0 @@
-title: How Long Will the Lights Stay Out?
-description: DSC 80 Final Project — U.S. Major Power Outage Duration Analysis
-theme: jekyll-theme-tactile
-
-url: "https://exitcy.github.io"
-baseurl: "/power-outage-analysis-ml"
-
-include:
-  - assets
