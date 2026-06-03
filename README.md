@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Home
 ---
 
@@ -64,7 +64,7 @@ These steps ensure that downstream permutation tests, regression models, and fai
 The histogram below shows the distribution of outage events across cause categories.
 
 <iframe
-  src="assets/univariate_cause_histogram.html"
+  src="{{ '/assets/univariate_cause_histogram.html' | relative_url }}"
   width="800"
   height="600"
   frameborder="0"
@@ -77,7 +77,7 @@ Severe weather is the most common cause category, accounting for roughly half of
 The box plot below displays the relationship between outage cause category and outage duration in minutes.
 
 <iframe
-  src="assets/bivariate_duration_by_cause.html"
+  src="{{ '/assets/bivariate_duration_by_cause.html' | relative_url }}"
   width="800"
   height="600"
   frameborder="0"
@@ -123,7 +123,7 @@ We test whether missingness in `CUSTOMERS.AFFECTED` depends on other columns usi
 **Interpretation:** At α = 0.05, we reject the independence hypothesis for `CAUSE.CATEGORY` (p = 0.0005): the proportion of missing `CUSTOMERS.AFFECTED` values varies significantly across cause categories. We fail to reject independence for `TOTAL.CUSTOMERS` (p = 0.807): grid scale does not appear to drive whether customer impact is reported. Because missingness depends on at least one observed column, the pattern is more consistent with **MAR** than **MCAR**, though—as argued above—this does not rule out an NMAR component tied to unobserved reporting processes.
 
 <iframe
-  src="assets/missingness_permutation_null.html"
+  src="{{ '/assets/missingness_permutation_null.html' | relative_url }}"
   width="800"
   height="600"
   frameborder="0"
@@ -156,7 +156,7 @@ We test whether outages caused by **severe weather** have a different average du
 <!-- AUTHOR REMINDER: Do not use language that implies absolute conclusions (e.g., "proves true" or "proved false"). This is a statistical test on observational data, not a randomized controlled trial—we cannot establish either hypothesis as 100% true or false. -->
 
 <iframe
-  src="assets/hypothesis_permutation_null.html"
+  src="{{ '/assets/hypothesis_permutation_null.html' | relative_url }}"
   width="800"
   height="600"
   frameborder="0"
@@ -252,7 +252,7 @@ The baseline model intentionally excludes `CAUSE.CATEGORY` to establish a lower 
 The final model reduces test RMSE by **891.24 minutes** (~17%) and explains roughly **32%** of duration variance compared to near-zero for the baseline. The improvement comes primarily from incorporating cause category and nonlinear seasonality/scale features that the linear baseline could not represent—consistent with the strong cause–duration relationship in our hypothesis test and EDA.
 
 <iframe
-  src="assets/final_model_residuals.html"
+  src="{{ '/assets/final_model_residuals.html' | relative_url }}"
   width="800"
   height="600"
   frameborder="0"
@@ -263,7 +263,8 @@ The final model reduces test RMSE by **891.24 minutes** (~17%) and explains roug
 We ask whether the **final duration model** predicts equally well for outages in high-population grid areas versus lower-population areas—an equity concern because underestimating duration where more customers are served could lead to under-allocation of repair resources.
 
 **Group definitions:**
-- **Group X (high-impact):** Outages where `TOTAL.CUSTOMERS` is at or above the training-set median (**3,957,980 customers**).
+- **Group X (high-impact):
+** Outages where `TOTAL.CUSTOMERS` is at or above the training-set median (**3,957,980 customers**).
 - **Group Y (low-impact):** Outages where `TOTAL.CUSTOMERS` is below the training-set median.
 
 **Evaluation metric:** RMSE (same regression metric as the prediction problem), computed separately on the held-out test set for each group.
@@ -290,7 +291,7 @@ We ask whether the **final duration model** predicts equally well for outages in
 **Interpretation:** The point estimate shows higher error for high-impact outages (RMSE difference ≈ 2,102 minutes), which warrants monitoring from a policy perspective. However, with test-set groups of roughly 145–151 events each and high duration variance, the permutation test does not find this gap statistically significant. We cannot conclude the model is unfair based on this test alone, but we also cannot claim perfect equity across grid scales.
 
 <iframe
-  src="assets/fairness_permutation_null.html"
+  src="{{ '/assets/fairness_permutation_null.html' | relative_url }}"
   width="800"
   height="600"
   frameborder="0"
