@@ -67,7 +67,18 @@ The histogram below shows the distribution of outage events across cause categor
   frameborder="0"
 ></iframe>
 
-Severe weather is the most common cause category, accounting for roughly half of all labeled outages in the dataset, while intentional attacks form the second-largest group. This imbalance motivates our hypothesis test comparing duration between these two high-frequency cause types. A second univariate plot in the project notebook examines the right-skewed distribution of `OUTAGE.DURATION` in minutes.
+Severe weather is the most common cause category, accounting for roughly half of all labeled outages in the dataset, while intentional attacks form the second-largest group. This imbalance motivates our hypothesis test comparing duration between these two high-frequency cause types.
+
+The histogram below shows the distribution of `OUTAGE.DURATION` in minutes.
+
+<iframe
+  src="{{ '/assets/univariate_duration_histogram.html' | relative_url }}"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Outage duration is strongly right-skewed: most events cluster at shorter lengths, but a long tail of multi-hour and multi-day outages pulls the mean well above the median. That skew motivates using RMSE (which penalizes large errors) and nonlinear models in Steps 6–7.
 
 ### Bivariate Analysis
 
@@ -80,7 +91,18 @@ The box plot below displays the relationship between outage cause category and o
   frameborder="0"
 ></iframe>
 
-Severe weather outages show substantially higher median and upper-quartile durations than intentional attacks, with severe weather events frequently lasting thousands of minutes while attack-related outages cluster near very short durations. Fuel supply emergencies show the highest mean duration but occur far less frequently, suggesting cause category is a strong candidate predictor for our regression task. The notebook also includes a scatter plot of duration versus total customers (log scale) to explore grid-scale effects alongside cause.
+Severe weather outages show substantially higher median and upper-quartile durations than intentional attacks, with severe weather events frequently lasting thousands of minutes while attack-related outages cluster near very short durations. Fuel supply emergencies show the highest mean duration but occur far less frequently, suggesting cause category is a strong candidate predictor for our regression task.
+
+The scatter plot below shows outage duration versus total customers in the affected area (log scale), colored by cause category.
+
+<iframe
+  src="{{ '/assets/bivariate_duration_vs_customers.html' | relative_url }}"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+Larger grids do not uniformly imply longer outages—cause category appears to dominate the vertical spread—but high-duration severe weather events occur across a wide range of customer counts, reinforcing that both grid scale and cause belong in the final model.
 
 ### Interesting Aggregates
 
@@ -260,8 +282,7 @@ The final model reduces test RMSE by **891.24 minutes** (~17%) and explains roug
 We ask whether the **final duration model** predicts equally well for outages in high-population grid areas versus lower-population areas—an equity concern because underestimating duration where more customers are served could lead to under-allocation of repair resources.
 
 **Group definitions:**
-- **Group X (high-impact):
-** Outages where `TOTAL.CUSTOMERS` is at or above the training-set median (**3,957,980 customers**).
+- **Group X (high-impact):** Outages where `TOTAL.CUSTOMERS` is at or above the training-set median (**3,957,980 customers**).
 - **Group Y (low-impact):** Outages where `TOTAL.CUSTOMERS` is below the training-set median.
 
 **Evaluation metric:** RMSE (same regression metric as the prediction problem), computed separately on the held-out test set for each group.
