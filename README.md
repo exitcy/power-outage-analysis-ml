@@ -174,6 +174,8 @@ We test whether outages caused by **severe weather** have a different average du
 
 <!-- AUTHOR REMINDER: Do not use language that implies absolute conclusions (e.g., "proves true" or "proved false"). This is a statistical test on observational data, not a randomized controlled trial—we cannot establish either hypothesis as 100% true or false. -->
 
+The plot below shows the empirical null distribution of the test statistic (absolute difference in sample means) from permuting duration labels between severe-weather and intentional-attack groups. The observed statistic (red dashed line) falls far in the right tail, confirming that the two cause categories have significantly different average outage durations.
+
 <iframe
   src="{{ '/assets/hypothesis_permutation_null.html' | relative_url }}"
   width="800"
