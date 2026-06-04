@@ -8,7 +8,7 @@
 
 This project analyzes the U.S. major power outage dataset (`outage.xlsx`), a collection of federally reported electric disturbance events in the continental United States from January 2000 through July 2016. Each row represents one major outage event. After loading the Excel file with `skiprows=5` to skip metadata header rows, the dataset contains 1,535 rows and 57 columns. Variables describe when and where an outage occurred, what caused it, how long it lasted, how many customers were affected, and contextual information about climate, electricity prices, and state-level demographics for the affected area.
 
-**Research question:** *How long do major power outages last, and what factors—especially outage cause—help explain or predict that duration?*
+**Research question:** *How long do major power outages last, and what factors, especially outage cause, help explain or predict that duration?*
 
 This question matters because power outages disrupt daily life. Hospitals lose power for critical equipment, homes lose heating and cooling, and cell networks go down. For utility planners and emergency crews, knowing how long a blackout might last helps them deploy repair teams faster, stage backup generators, and strengthen vulnerable parts of the grid. Ultimately, longer outages mean deeper disruptions to businesses and schools, so finding out what drives these delays has real-world stakes far beyond a spreadsheet.
 
@@ -18,7 +18,7 @@ The columns most relevant to the research question are listed below, with descri
 | --- | --- |
 | `OUTAGE.DURATION` | Length of the outage in minutes. This is our primary outcome for regression and the variable compared across cause groups in hypothesis testing. |
 | `CAUSE.CATEGORY` | Broad cause label assigned to the event (e.g., severe weather, intentional attack, equipment failure). Used in hypothesis testing and as a predictor in the final duration model. |
-| `U.S._STATE` | U.S. state where the outage occurred. Captures geographic context—different states have different grid infrastructure, weather exposure, and regulatory environments. |
+| `U.S._STATE` | U.S. state where the outage occurred. Captures geographic context, different states have different grid infrastructure, weather exposure, and regulatory environments. |
 | `CLIMATE.REGION` | NOAA-style climate region for the affected area. Encodes regional weather patterns that influence outage severity and restoration difficulty. |
 | `MONTH` | Calendar month (1–12) when the outage started. Encodes seasonality (e.g., winter ice storms vs. summer heat events) in baseline and final models. |
 | `ANOMALY.LEVEL` | Climate anomaly level associated with the event. An ordinal measure of how unusual local climate conditions were at the time of the outage. |
@@ -118,7 +118,7 @@ The table below summarizes outage count, mean duration, and median duration by c
 | islanding | 44 | 200.55 | 77.5 |
 | fuel supply emergency | 38 | 13484.03 | 3960.0 |
 
-The data shows a massive gap in outage lengths based on their cause. Severe weather outages average 3,884 minutes, while intentional attacks average just 430 minutes—a nearly ninefold difference. Looking at typical middle-ground cases (the medians) confirms this isn't just skewed by a few extreme storms. Meanwhile, fuel supply emergencies drag on the longest (averaging over 13,000 minutes) but are rare, with only 38 events. Ultimately, this proves my main point, that the cause of an outage strongly predicts how long people lose power.
+The data shows a massive gap in outage lengths based on their cause. Severe weather outages average 3,884 minutes, while intentional attacks average just 430 minutes, a nearly ninefold difference. Looking at typical middle-ground cases (the medians) confirms this isn't just skewed by a few extreme storms. Meanwhile, fuel supply emergencies drag on the longest (averaging over 13,000 minutes) but are rare, with only 38 events. Ultimately,the cause of an outage strongly predicts how long people lose power.
 
 ## Assessment of Missingness
 
