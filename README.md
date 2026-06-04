@@ -1,6 +1,6 @@
 
 
-# How Long Will the Lights Stay Out? Predicting U.S. Major Power Outage Duration
+# Predicting U.S. Major Power Outage Duration
 
 **Patrick Wu**
 
