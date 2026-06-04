@@ -6,7 +6,7 @@
 
 ## Introduction
 
-This project analyzes the U.S. major power outage dataset (`outage.xlsx`), a collection of federally reported electric disturbance events in the continental United States from January 2000 through July 2016. Each row represents one major outage event. After loading the Excel file with `skiprows=5` to skip metadata header rows, the dataset contains 1,535 rows and 57 columns. Variables describe when and where an outage occurred, what caused it, how long it lasted, how many customers were affected, and contextual information about climate, electricity prices, and state-level demographics for the affected area.
+This project analyzes the "Major Power Outage Risks in the U.S." dataset, a collection of federally reported electric disturbance events in the continental United States from January 2000 through July 2016, sourced from Purdue University's Laboratory for Advancing Sustainable Critical Infrastructure. Each row represents one major outage event. After loading the Excel file (outage.xlsx) with skiprows=5 to skip metadata header rows, the dataset contains 1,535 rows and 57 columns. Variables describe when and where an outage occurred, what caused it, how long it lasted, how many customers were affected, and contextual information about climate, electricity prices, and state-level demographics for the affected area.
 
 **Research question:** *How long do major power outages last, and what factors, especially outage cause, help explain or predict that duration?*
 
@@ -32,7 +32,7 @@ The columns most relevant to the research question are listed below, with descri
 
 ### Data Cleaning
 
-The cleaning steps fix the issues built right into the raw data. The Department of Energy collects these OE-417 disturbance reports from utilities as Excel files. Because they span multiple years and entities, the raw files are messy, filled with metadata headers, mixed data types, and inconsistent text formatting.
+The cleaning steps fix the issues built right into the raw data. The Department of Energy collects these disturbance reports from utilities as Excel files. Because they span multiple years and entities, the raw files are messy, filled with metadata headers, mixed data types, and inconsistent text formatting.
 
 1. **Load with `skiprows=5`.** The raw Excel file contains five header/metadata rows before the first data record. Skipping them ensures each row in our DataFrame corresponds to one reported outage event rather than documentation text. Without this step, summary statistics and row counts would be wrong.
 
