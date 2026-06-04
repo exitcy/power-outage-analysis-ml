@@ -10,7 +10,7 @@ This project analyzes the U.S. major power outage dataset (`outage.xlsx`), a col
 
 **Research question:** *How long do major power outages last, and what factors—especially outage cause—help explain or predict that duration?*
 
-This question matters to the general public because power outages directly affect daily life: hospitals rely on electricity for critical equipment, homes depend on power for heating and cooling, and communication networks fail when the grid goes down. For utility planners and emergency responders, knowing how long an outage is likely to last supports decisions about where to send repair crews, how to stage backup resources, and how to prioritize grid resilience investments. Longer outages mean longer disruption to businesses, schools, and essential services, so understanding the drivers of outage duration has real-world stakes beyond the spreadsheet.
+This question matters because power outages disrupt daily life. Hospitals lose power for critical equipment, homes lose heating and cooling, and cell networks go down. For utility planners and emergency crews, knowing how long a blackout might last helps them deploy repair teams faster, stage backup generators, and strengthen vulnerable parts of the grid. Ultimately, longer outages mean deeper disruptions to businesses and schools, so finding out what drives these delays has real-world stakes far beyond a spreadsheet.
 
 The columns most relevant to the research question are listed below, with descriptions of what each represents in the data generating process:
 
@@ -32,7 +32,7 @@ The columns most relevant to the research question are listed below, with descri
 
 ### Data Cleaning
 
-Our cleaning steps fix the issues built right into the raw data. The Department of Energy collects these OE-417 disturbance reports from utilities as Excel files. Because they span multiple years and entities, the raw files are messy, filled with metadata headers, mixed data types, and inconsistent text formatting.
+The cleaning steps fix the issues built right into the raw data. The Department of Energy collects these OE-417 disturbance reports from utilities as Excel files. Because they span multiple years and entities, the raw files are messy, filled with metadata headers, mixed data types, and inconsistent text formatting.
 
 1. **Load with `skiprows=5`.** The raw Excel file contains five header/metadata rows before the first data record. Skipping them ensures each row in our DataFrame corresponds to one reported outage event rather than documentation text. Without this step, summary statistics and row counts would be wrong.
 
@@ -67,7 +67,7 @@ The histogram below shows the distribution of outage events across cause categor
   frameborder="0"
 ></iframe>
 
-Severe weather is the most common cause category, accounting for roughly half of all labeled outages in the dataset, while intentional attacks form the second-largest group. This imbalance motivates our hypothesis test comparing duration between these two high-frequency cause types.
+Severe weather is the most common cause category, accounting for roughly half of all labeled outages in the dataset, while intentional attacks form the second-largest group. This imbalance motivates the hypothesis test comparing duration between these two high-frequency cause types.
 
 The histogram below shows the distribution of `OUTAGE.DURATION` in minutes.
 
@@ -118,17 +118,17 @@ The table below summarizes outage count, mean duration, and median duration by c
 | islanding | 44 | 200.55 | 77.5 |
 | fuel supply emergency | 38 | 13484.03 | 3960.0 |
 
-The data shows a massive gap in outage lengths based on their cause. Severe weather outages average 3,884 minutes, while intentional attacks average just 430 minutes—a nearly ninefold difference. Looking at typical middle-ground cases (the medians) confirms this isn't just skewed by a few extreme storms. Meanwhile, fuel supply emergencies drag on the longest (averaging over 13,000 minutes) but are rare, with only 38 events. Ultimately, this proves our main point, that the cause of an outage strongly predicts how long people lose power.
+The data shows a massive gap in outage lengths based on their cause. Severe weather outages average 3,884 minutes, while intentional attacks average just 430 minutes—a nearly ninefold difference. Looking at typical middle-ground cases (the medians) confirms this isn't just skewed by a few extreme storms. Meanwhile, fuel supply emergencies drag on the longest (averaging over 13,000 minutes) but are rare, with only 38 events. Ultimately, this proves my main point, that the cause of an outage strongly predicts how long people lose power.
 
 ## Assessment of Missingness
 
 ### NMAR Analysis
 
-We focus on **`CUSTOMERS.AFFECTED`**, which has a missingness rate of **28.9%** (443 of 1,535 rows).
+The focus is on **`CUSTOMERS.AFFECTED`**, which has a missingness rate of **28.9%** (443 of 1,535 rows).
 
-We suspect the missing data in CUSTOMERS.AFFECTED is NMAR (Not Missing At Random). This means the reason a value is missing depends on information we simply don't have. For instance, a utility company might leave out the customer count because they missed the reporting deadline, their damage survey wasn't done, or the event was a cyberattack redacted for security reasons. Because the missingness depends on these hidden workflows or the true scale of the outage itself, we can't explain it using just our visible data.
+I suspect that the missing data in CUSTOMERS.AFFECTED is NMAR (Not Missing At Random). This means the reason a value is missing depends on information we simply don't have. For instance, a utility company might leave out the customer count because they missed the reporting deadline, their damage survey wasn't done, or the event was a cyberattack redacted for security reasons. Because the missingness depends on these hidden workflows or the true scale of the outage itself, we can't explain it using just our visible data.
 
-A statistical test alone cannot prove a dataset is NMAR. While our permutation tests show that missing values are linked to the CAUSE.CATEGORY (which points to MAR), tests cannot distinguish between the two mechanisms. To truly rule out NMAR and explain the missing data, we would need extra variables—like internal utility ticket timestamps, filing dates, and regulatory audit flags. These extra fields would let us model the missing data based on clear, observed filing rules rather than unobserved corporate decisions.
+A statistical test alone cannot prove a dataset is NMAR. While the permutation tests show that missing values are linked to the CAUSE.CATEGORY (which points to MAR), tests cannot distinguish between the two mechanisms. To truly rule out NMAR and explain the missing data,  extra variables—like internal utility ticket timestamps, filing dates, and regulatory audit flags are needed. These extra fields would let us model the missing data based on clear, observed filing rules rather than unobserved corporate decisions.
 
 ### Missingness Dependency
 
@@ -137,11 +137,11 @@ We test whether missingness in `CUSTOMERS.AFFECTED` depends on other observed co
 #### Test 1: `CAUSE.CATEGORY` (expected dependence)
 
 - **Null Hypothesis (H₀):** Missingness in `CUSTOMERS.AFFECTED` is independent of `CAUSE.CATEGORY`. The proportion of missing customer-impact values is the same across cause groups (after accounting for group size).
-- **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `CAUSE.CATEGORY`—at least one cause group has a different missingness rate.
+- **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `CAUSE.CATEGORY, at least one cause group has a different missingness rate.
 - **Test statistic:** Variance of group-wise missingness rates (proportion missing `CUSTOMERS.AFFECTED` within each cause category, including outages with unlabeled cause as `__MISSING__`).
 - **Observed statistic:** **0.098105** | **p-value:** **0.000500**
 
-The grouped bar chart below compares the distribution of `CAUSE.CATEGORY` when customer impact is missing versus observed (Lecture 8 style). When impact is missing, intentional attacks and public appeals make up a much larger share of events than when impact is recorded—suggesting reporting practices differ by cause type.
+The grouped bar chart below compares the distribution of `CAUSE.CATEGORY` when customer impact is missing versus observed. When impact is missing, intentional attacks and public appeals make up a much larger share of events than when impact is recorded, suggesting reporting practices differ by cause type.
 
 <iframe
   src="{{ '/assets/missingness_cause_by_impact_status.html' | relative_url }}"
@@ -162,7 +162,7 @@ The grouped bar chart below compares the distribution of `CAUSE.CATEGORY` when c
 #### Test 2: `TOTAL.CUSTOMERS` (control — expected no dependence)
 
 - **Null Hypothesis (H₀):** Missingness in `CUSTOMERS.AFFECTED` is independent of `TOTAL.CUSTOMERS`. The mean grid scale (total customers in the affected area) is the same whether customer impact is missing or observed.
-- **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `TOTAL.CUSTOMERS`—mean grid scale differs between rows with missing versus observed impact.
+- **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `TOTAL.CUSTOMERS`, mean grid scale differs between rows with missing versus observed impact.
 - **Test statistic:** Absolute difference in mean `TOTAL.CUSTOMERS` between rows with missing versus observed `CUSTOMERS.AFFECTED`.
 - **Observed statistic:** **59,563.64** | **p-value:** **0.807096**
 
@@ -189,11 +189,11 @@ The grouped bar chart below compares the distribution of `CAUSE.CATEGORY` when c
 | CAUSE.CATEGORY | categorical missingness-permutation | 0.098105 | 0.000500 | Reject H₀ (depends) |
 | TOTAL.CUSTOMERS | numeric missingness-permutation | 59563.64 | 0.807096 | Fail to reject H₀ (no dependence) |
 
-Because missingness depends on at least one observed column (`CAUSE.CATEGORY`) but not on `TOTAL.CUSTOMERS`, the pattern is more consistent with MAR than MCAR, though—as argued in the NMAR section above—this does not rule out an NMAR component tied to unobserved reporting processes.
+Because missingness depends on at least one observed column (`CAUSE.CATEGORY`) but not on `TOTAL.CUSTOMERS`, the pattern is more consistent with MAR than MCAR, though, as argued in the NMAR section above, this does not rule out an NMAR component tied to unobserved reporting processes.
 
 ## Hypothesis Testing
 
-We test whether outages caused by severe weather have a different average duration than those caused by intentional attacks—the two most common cause categories and the pair with the largest apparent duration gap in our EDA.
+We test whether outages caused by severe weather have a different average duration than those caused by intentional attacks, the two most common cause categories and the pair with the largest apparent duration gap in our EDA.
 
 - **Null Hypothesis (H₀):** The duration of power outages caused by severe weather and those caused by intentional attacks come from the same underlying distribution (equal population means).
 - **Alternative Hypothesis (Hₐ):** Power outages caused by severe weather have a different average duration than power outages caused by intentional attacks.
@@ -230,7 +230,7 @@ The plot below displays the test results. The bell-shaped curve shows what the d
 
 **Response variable:** `OUTAGE.DURATION` (minutes). We selected this target because it is the direct quantitative answer to our research question. Our hypothesis test showed that cause category is strongly associated with duration, and planners need a minute-level forecast to schedule crew deployments and communicate restoration timelines to the public.
 
-**Evaluation metric:** **Root Mean Squared Error (RMSE)** on held-out test data (20% split, `random_state=80`). RMSE penalizes large prediction errors more heavily than mean absolute error, which matters when underestimating a multi-day outage is costlier than a small timing error. We report R² as a secondary metric to describe variance explained, but R² alone does not measure error magnitude in minutes—so RMSE is our primary score. Accuracy and F1 are not applicable because this is a regression task, not classification.
+**Evaluation metric:** **Root Mean Squared Error (RMSE)** on held-out test data (20% split, `random_state=80`). RMSE penalizes large prediction errors more heavily than mean absolute error, which matters when underestimating a multi-day outage is costlier than a small timing error. We report R² as a secondary metric to describe variance explained, but R² alone does not measure error magnitude in minutes, so RMSE is our primary score. Accuracy and F1 are not applicable because this is a regression task, not classification.
 
 **Time-of-prediction justification:**
 
@@ -287,9 +287,9 @@ The baseline model intentionally excludes `CAUSE.CATEGORY` to establish a lower 
 
 2. **`QuantileTransformer` on `ANOMALY.LEVEL`:** Anomaly level is an ordinal climate severity score. Transforming it to a normal-like scale helps the forest use rank-based thresholds when raw magnitudes are sparse or unevenly spaced across events.
 
-3. **`sin(2π · MONTH / 12)`:** Month is cyclical: December (12) is adjacent to January (1) in the calendar but far apart as a raw integer. Seasonal outage drivers (winter ice, summer heat) repeat annually, so a sine feature encodes that cycle in a way linear month cannot.
+3. **`sin(2π · MONTH / 12)`:** Month is cyclical: December (12) is adjacent to January (1) in the calendar but far apart as a raw integer. Seasonal outage drivers repeat annually, so a sine feature encodes that cycle in a way linear month cannot.
 
-4. **`CAUSE.CATEGORY`:** Severe weather and intentional attacks differ by thousands of minutes on average in our hypothesis test. Cause is assigned early in the reporting process and reflects fundamentally different physical recovery workflows (e.g., storm damage repair vs. localized vandalism), making it a high-value feature from a data generating process perspective.
+4. **`CAUSE.CATEGORY`:** Severe weather and intentional attacks differ by thousands of minutes on average in our hypothesis test. Cause is assigned early in the reporting process and reflects  different physical recovery workflows (e.g., storm damage repair vs. localized vandalism), making it a high-value feature from a data generating process perspective.
 
 **Algorithm:** `RandomForestRegressor` inside a single sklearn `Pipeline`.
 
@@ -309,7 +309,7 @@ The baseline model intentionally excludes `CAUSE.CATEGORY` to establish a lower 
 | Baseline (`LinearRegression`) | 5,179.97 | 0.0048 |
 | Final (`RandomForestRegressor`) | 4,288.72 | 0.3178 |
 
-The final model reduces test RMSE by **891.24 minutes** (~17%) and explains roughly **32%** of duration variance compared to near-zero for the baseline. The improvement comes primarily from incorporating cause category and nonlinear seasonality/scale features that the linear baseline could not represent—consistent with the strong cause–duration relationship in our hypothesis test and EDA.
+The final model reduces test RMSE by **891.24 minutes** (~17%) and explains roughly **32%** of duration variance compared to near-zero for the baseline. The improvement comes primarily from incorporating cause category and nonlinear seasonality/scale features that the linear baseline could not represent, consistent with the strong cause–duration relationship in our hypothesis test and EDA.
 
 <iframe
   src="{{ '/assets/final_model_residuals.html' | relative_url }}"
@@ -320,7 +320,7 @@ The final model reduces test RMSE by **891.24 minutes** (~17%) and explains roug
 
 ## Fairness Analysis
 
-We ask whether the final duration model predicts equally well for outages in high-population grid areas versus lower-population areas—an equity concern because underestimating duration where more customers are served could lead to under-allocation of repair resources.
+We ask whether the final duration model predicts equally well for outages in high-population grid areas versus lower-population areas, an equity concern because underestimating duration where more customers are served could lead to under-allocation of repair resources.
 
 **Group definitions:**
 - **Group X (high-impact):** Outages where `TOTAL.CUSTOMERS` is at or above the training-set median (**3,957,980 customers**).
