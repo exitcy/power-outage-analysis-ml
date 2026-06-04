@@ -2,7 +2,7 @@
 
 # Predicting U.S. Major Power Outage Duration
 
-**Patrick Wu**
+**By Patrick Wu**
 
 ## Introduction
 
