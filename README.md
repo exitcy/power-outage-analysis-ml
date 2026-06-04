@@ -126,9 +126,9 @@ The data shows a massive gap in outage lengths based on their cause. Severe weat
 
 The focus is on **`CUSTOMERS.AFFECTED`**, which has a missingness rate of **28.9%** (443 of 1,535 rows).
 
-I suspect that the missing data in CUSTOMERS.AFFECTED is NMAR (Not Missing At Random). This means the reason a value is missing depends on information we simply don't have. For instance, a utility company might leave out the customer count because they missed the reporting deadline, their damage survey wasn't done, or the event was a cyberattack redacted for security reasons. Because the missingness depends on these hidden workflows or the true scale of the outage itself, we can't explain it using just our visible data.
+I suspect that the missing data in 'CUSTOMERS.AFFECTED' is NMAR (Not Missing At Random). This means the reason a value is missing depends on information we simply don't have. For instance, a utility company might leave out the customer count because they missed the reporting deadline, their damage survey wasn't done, or the event was a cyberattack redacted for security reasons. Because the missingness depends on these hidden workflows or the true scale of the outage itself, we can't explain it using just our visible data.
 
-A statistical test alone cannot prove a dataset is NMAR. While the permutation tests show that missing values are linked to the CAUSE.CATEGORY (which points to MAR), tests cannot distinguish between the two mechanisms. To truly rule out NMAR and explain the missing data,  extra variables—like internal utility ticket timestamps, filing dates, and regulatory audit flags are needed. These extra fields would let us model the missing data based on clear, observed filing rules rather than unobserved corporate decisions.
+A statistical test alone cannot prove a dataset is NMAR. While the permutation tests show that missing values are linked to the 'CAUSE.CATEGORY' (which points to MAR), tests cannot distinguish between the two mechanisms. To truly rule out NMAR and explain the missing data,  extra variables: like internal utility ticket timestamps, filing dates, and regulatory audit flags are needed. These extra fields would let us model the missing data based on clear, observed filing rules rather than unobserved corporate decisions.
 
 ### Missingness Dependency
 
@@ -159,7 +159,7 @@ The grouped bar chart below compares the distribution of `CAUSE.CATEGORY` when c
 
 **Decision:** Because p < α, we **reject H₀**. Missingness in `CUSTOMERS.AFFECTED` is not independent of `CAUSE.CATEGORY`. The observed statistic (red dashed line) lies far in the right tail of the permutation null distribution above.
 
-#### Test 2: `TOTAL.CUSTOMERS` (control — expected no dependence)
+#### Test 2: `TOTAL.CUSTOMERS` (control, expected no dependence)
 
 - **Null Hypothesis (H₀):** Missingness in `CUSTOMERS.AFFECTED` is independent of `TOTAL.CUSTOMERS`. The mean grid scale (total customers in the affected area) is the same whether customer impact is missing or observed.
 - **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `TOTAL.CUSTOMERS`, mean grid scale differs between rows with missing versus observed impact.
@@ -244,7 +244,7 @@ We frame the prediction as occurring shortly after an outage is reported and cla
 | `ANOMALY.LEVEL` | Yes | Climate context for the event period is observable at start. |
 | `TOTAL.CUSTOMERS` | Yes | Grid scale for the affected area is a fixed infrastructure attribute. |
 | `CAUSE.CATEGORY` | Yes (final model) | Initial cause classification is assigned early in the reporting process. |
-| `OUTAGE.DURATION` | **No** | This is the target—we cannot use the answer to predict itself. |
+| `OUTAGE.DURATION` | **No** | This is the target, we cannot use the answer to predict itself. |
 | `OUTAGE.RESTORATION.DATE/TIME` | **No** | Restoration timestamps are only known after the outage ends (look-ahead bias). |
 | `CUSTOMERS.AFFECTED` | **No** | Often missing or updated after initial report; not reliably known at onset. |
 | Post-outcome economic fields | **No** | Price, sales, and GSP figures describe the billing period, not early outage conditions. |
@@ -337,8 +337,6 @@ We ask whether the final duration model predicts equally well for outages in hig
 **Significance level:** α = **0.05**.
 
 **Method:** Permutation test (2,000 repetitions) shuffling group labels on the test set while keeping model predictions fixed.
-
-<!-- AUTHOR REMINDER: The permutation test must use the final, unmodified fitted model—no retraining during the fairness test. -->
 
 **Results (test set):**
 - n(high-impact) = 145, RMSE = **5,230.23 minutes**
