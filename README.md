@@ -10,7 +10,7 @@ This project analyzes the U.S. major power outage dataset (`outage.xlsx`), a col
 
 **Research question:** *How long do major power outages last, and what factors, especially outage cause, help explain or predict that duration?*
 
-This question matters because power outages disrupt daily life. Hospitals lose power for critical equipment, homes lose heating and cooling, and cell networks go down. For utility planners and emergency crews, knowing how long a blackout might last helps them deploy repair teams faster, stage backup generators, and strengthen vulnerable parts of the grid. Ultimately, longer outages mean deeper disruptions to businesses and schools, so finding out what drives these delays has real-world stakes far beyond a spreadsheet.
+This question matters because power outages disrupt daily life. Hospitals lose power for critical equipment, homes lose heating and cooling, and cell networks go down. For utility planners and emergency crews, knowing how long a blackout might last helps them deploy repair teams faster, stage backup generators, and strengthen vulnerable parts of the grid. Essentially, longer outages mean deeper disruptions to businesses and schools, so finding out what drives these delays has real-world stakes far beyond a spreadsheet.
 
 The columns most relevant to the research question are listed below, with descriptions of what each represents in the data generating process:
 
@@ -118,7 +118,7 @@ The table below summarizes outage count, mean duration, and median duration by c
 | islanding | 44 | 200.55 | 77.5 |
 | fuel supply emergency | 38 | 13484.03 | 3960.0 |
 
-The data shows a massive gap in outage lengths based on their cause. Severe weather outages average 3,884 minutes, while intentional attacks average just 430 minutes, a nearly ninefold difference. Looking at typical middle-ground cases (the medians) confirms this isn't just skewed by a few extreme storms. Meanwhile, fuel supply emergencies drag on the longest (averaging over 13,000 minutes) but are rare, with only 38 events. Ultimately,the cause of an outage strongly predicts how long people lose power.
+The data shows a massive gap in outage lengths based on their cause. Severe weather outages average 3,884 minutes, while intentional attacks average just 430 minutes, a nearly ninefold difference. Looking at typical middle-ground cases (the medians) confirms this isn't just skewed by a few extreme storms. Meanwhile, fuel supply emergencies drag on the longest (averaging over 13,000 minutes) but are rare, with only 38 events. Therefore ,the cause of an outage strongly predicts how long people lose power.
 
 ## Assessment of Missingness
 
