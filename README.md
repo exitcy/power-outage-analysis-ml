@@ -132,14 +132,23 @@ Looking at the data alone is not enough to confirm NMAR. Our permutation tests b
 
 ### Missingness Dependency
 
-We test whether missingness in `CUSTOMERS.AFFECTED` depends on other columns using permutation tests (2,000 repetitions, α = 0.05):
+We test whether **missingness in `CUSTOMERS.AFFECTED`** depends on other observed columns using permutation tests (2,000 repetitions, **α = 0.05**). For each test we shuffle the missingness indicator while holding the comparison column fixed, then compare the observed statistic to the simulated null distribution.
 
-| column_tested | test_type | statistic | p_value |
-| --- | --- | --- | --- |
-| CAUSE.CATEGORY | categorical missingness-permutation | 0.098105 | 0.000500 |
-| TOTAL.CUSTOMERS | numeric missingness-permutation | 59563.64 | 0.807096 |
+#### Test 1: `CAUSE.CATEGORY` (expected dependence)
 
-**Interpretation:** At α = 0.05, we reject the independence hypothesis for `CAUSE.CATEGORY` (p = 0.0005): the proportion of missing `CUSTOMERS.AFFECTED` values varies significantly across cause categories. We fail to reject independence for `TOTAL.CUSTOMERS` (p = 0.807): grid scale does not appear to drive whether customer impact is reported. Because missingness depends on at least one observed column, the pattern is more consistent with **MAR** than **MCAR**, though—as argued above—this does not rule out an NMAR component tied to unobserved reporting processes.
+- **Null Hypothesis (H₀):** Missingness in `CUSTOMERS.AFFECTED` is independent of `CAUSE.CATEGORY`. The proportion of missing customer-impact values is the same across cause groups (after accounting for group size).
+- **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `CAUSE.CATEGORY`—at least one cause group has a different missingness rate.
+- **Test statistic:** Variance of group-wise missingness rates (proportion missing `CUSTOMERS.AFFECTED` within each cause category, including outages with unlabeled cause as `__MISSING__`).
+- **Observed statistic:** **0.098105** | **p-value:** **0.000500**
+
+The grouped bar chart below compares the **distribution of `CAUSE.CATEGORY`** when customer impact is missing versus observed (Lecture 8 style). When impact is missing, intentional attacks and public appeals make up a much larger share of events than when impact is recorded—suggesting reporting practices differ by cause type.
+
+<iframe
+  src="{{ '/assets/missingness_cause_by_impact_status.html' | relative_url }}"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
 
 <iframe
   src="{{ '/assets/missingness_permutation_null.html' | relative_url }}"
@@ -148,7 +157,39 @@ We test whether missingness in `CUSTOMERS.AFFECTED` depends on other columns usi
   frameborder="0"
 ></iframe>
 
-The plot above shows the empirical null distribution of the test statistic (variance of group-wise missingness rates) from permuting missingness labels for `CAUSE.CATEGORY`. The observed statistic (red dashed line) falls far in the right tail, confirming that missingness is not independent of cause category.
+**Decision:** Because p < α, we **reject H₀**. Missingness in `CUSTOMERS.AFFECTED` is not independent of `CAUSE.CATEGORY`. The observed statistic (red dashed line) lies far in the right tail of the permutation null distribution above.
+
+#### Test 2: `TOTAL.CUSTOMERS` (control — expected no dependence)
+
+- **Null Hypothesis (H₀):** Missingness in `CUSTOMERS.AFFECTED` is independent of `TOTAL.CUSTOMERS`. The mean grid scale (total customers in the affected area) is the same whether customer impact is missing or observed.
+- **Alternative Hypothesis (Hₐ):** Missingness in `CUSTOMERS.AFFECTED` depends on `TOTAL.CUSTOMERS`—mean grid scale differs between rows with missing versus observed impact.
+- **Test statistic:** Absolute difference in mean `TOTAL.CUSTOMERS` between rows with missing versus observed `CUSTOMERS.AFFECTED`.
+- **Observed statistic:** **59,563.64** | **p-value:** **0.807096**
+
+<iframe
+  src="{{ '/assets/missingness_total_customers_by_impact_status.html' | relative_url }}"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+<iframe
+  src="{{ '/assets/missingness_total_customers_permutation_null.html' | relative_url }}"
+  width="800"
+  height="600"
+  frameborder="0"
+></iframe>
+
+**Decision:** Because p > α, we **fail to reject H₀**. There is no statistically significant evidence that missingness in `CUSTOMERS.AFFECTED` depends on `TOTAL.CUSTOMERS`. The box plot and permutation null distribution are consistent with similar grid scales whether impact is reported or not.
+
+#### Summary
+
+| column_tested | test_type | statistic | p_value | decision (α = 0.05) |
+| --- | --- | --- | --- | --- |
+| CAUSE.CATEGORY | categorical missingness-permutation | 0.098105 | 0.000500 | Reject H₀ (depends) |
+| TOTAL.CUSTOMERS | numeric missingness-permutation | 59563.64 | 0.807096 | Fail to reject H₀ (no dependence) |
+
+Because missingness depends on at least one observed column (`CAUSE.CATEGORY`) but not on `TOTAL.CUSTOMERS`, the pattern is more consistent with **MAR** than **MCAR**, though—as argued in the NMAR section above—this does not rule out an NMAR component tied to unobserved reporting processes.
 
 ## Hypothesis Testing
 
