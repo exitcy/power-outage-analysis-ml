@@ -277,7 +277,7 @@ The baseline model intentionally excludes `CAUSE.CATEGORY` to establish a lower 
 - **Test RMSE: 5,179.97 minutes**
 - **Test R²: 0.0048**
 
-**Is the baseline good?** No. The baseline model explains almost none of the variation in outage lengths ($R^2 \approx 0$). In fact, it performs barely better than just guessing the average duration for every single outage (baseline error is 5,194.47 minutes).This failure makes sense: a simple linear model that ignores the outage cause can't capture the massive differences between severe weather and attacks that we uncovered earlier. This baseline simply sets a realistic starting point before we bring in engineered features and a 'RandomForestRegressor'.
+**Is the baseline good?** No. The baseline model explains almost none of the variation in outage lengths, yielding an R² score of approximately 0. In fact, it performs barely better than just guessing the average duration for every single outage (baseline error is 5,194.47 minutes).This failure makes sense: a simple linear model that ignores the outage cause can't capture the massive differences between severe weather and attacks that we uncovered earlier. This baseline simply sets a realistic starting point before we bring in engineered features and a 'RandomForestRegressor'.
 
 ## Final Model
 
