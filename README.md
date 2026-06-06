@@ -34,7 +34,7 @@ The columns most relevant to the research question are listed below, with descri
 
 The cleaning steps fix the issues built right into the raw data. The Department of Energy collects these disturbance reports from utilities as Excel files. Because they span multiple years and entities, the raw files are messy, filled with metadata headers, mixed data types, and inconsistent text formatting.
 
-1. **Load with `skiprows=5`.** The raw Excel file contains five header/metadata rows before the first data record. Skipping them ensures each row in our DataFrame corresponds to one reported outage event rather than documentation text. Without this step, summary statistics and row counts would be wrong.
+1. **Load with `skiprows=5`.** The raw Excel file contains five header/metadata rows before the first data record. Skipping the first five rows because they contain header info, not actual data. If this is not done, summary statistics and row counts would be wrong.
 
 2. **Drop the spurious variable-definition row.** After loading, the first row is sometimes a repeated column-name or variable glossary row (detected when all values are null or the row contains the word "variables"). Removing it prevents a non-event row from entering plots and models.
 
